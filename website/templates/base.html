@@ -12,7 +12,19 @@
     />
   </head>
   <body>
-    {% include 'navbar.html' %}
+    {% include 'navbar.html' %} {% if maintenance_banner %}
+    <div
+      style="
+        background: #ffcc00;
+        color: #000;
+        text-align: center;
+        padding: 10px;
+        font-weight: bold;
+      "
+    >
+      ⚠️ {{ maintenance_banner }}
+    </div>
+    {% endif %}
     <div class="container">
       <br />
       {% if messages %} {% for message in messages %}

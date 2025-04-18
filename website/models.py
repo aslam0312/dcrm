@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 
 class Record(models.Model):
@@ -14,3 +15,21 @@ class Record(models.Model):
 
 	def __str__(self):
 		return(f"{self.first_name} {self.last_name}")
+	
+
+
+class MaintenanceBanner(models.Model):
+    message = models.TextField()
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def is_active(self):
+        now = timezone.now()
+        return self.start_time <= now <= self.end_time
+
+    class Meta:
+        ordering = ['start_time']
+
+    def __str__(self):
+        return f"Maintenance from {self.start_time} to {self.end_time}"

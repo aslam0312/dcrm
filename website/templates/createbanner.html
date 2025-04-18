@@ -1,0 +1,19 @@
+{% extends 'base.html' %} {% block content %}
+<div class="container mt-5">
+  <h2 class="mb-4">Create Maintenance Banner</h2>
+  <form method="post">
+    {% csrf_token %}
+
+    <div class="mb-3">
+      <label for="id_start_time" class="form-label">Start Time</label>
+      {{ form.start_time }}
+    </div>
+    <div class="mb-3">
+      <label for="id_end_time" class="form-label">End Time</label>
+      {{ form.end_time }}
+    </div>
+    <button type="submit" class="btn btn-primary">Post Banner</button>
+    <a href="{% url 'home' %}" class="btn btn-secondary ms-2">Cancel</a>
+  </form>
+</div>
+{% endblock %}
