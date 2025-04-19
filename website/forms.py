@@ -54,7 +54,7 @@ class AddRecordForm(forms.ModelForm):
 class MaintenanceBannerForm(forms.ModelForm):
     class Meta:
         model = MaintenanceBanner
-        fields = ['message', 'start_time', 'end_time']
+        fields = [ 'start_time', 'end_time']
         widgets = {
             'start_time': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
             'end_time': forms.DateTimeInput(attrs={'type': 'datetime-local'}),
