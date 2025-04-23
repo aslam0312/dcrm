@@ -3,22 +3,24 @@ from django.utils import timezone
 
 def maintenance_banner(request):
     now = timezone.now()
-    banner = (
-        MaintenanceBanner.objects
-        .filter(start_time__isnull=False, end_time__isnull=False)
-        .order_by('start_time')
-        .first()
-    )
+    banners = MaintenanceBanner.objects.filter(
+        start_time__isnull=False,
+        end_time__isnull=False,
+        end_time__gte=now  # Only future and ongoing
+    ).order_by('start_time')
 
-    if not banner:
+    if not banners.exists():
         return {}
 
-    if now < banner.start_time:
-        message = f"There is a scheduled maintenance on {banner.start_time.strftime('%Y-%m-%d %H:%M')} to {banner.end_time.strftime('%Y-%m-%d %H:%M')}. Thanks for the understanding."
-        return {"maintenance_banner": message}
+    banner_messages = []
 
-    elif banner.start_time <= now < banner.end_time:
-        message = f"Scheduled maintenance ongoing until {banner.end_time.strftime('%Y-%m-%d %H:%M')}."
-        return {"maintenance_banner": message}
+    for banner in banners:
+        if now < banner.start_time:
+            message = f"Upcoming: Scheduled maintenance on {banner.start_time.strftime('%Y-%m-%d %H:%M')} to {banner.end_time.strftime('%Y-%m-%d %H:%M')}."
+        elif banner.start_time <= now < banner.end_time:
+            message = f"Ongoing: Scheduled maintenance until {banner.end_time.strftime('%Y-%m-%d %H:%M')}."
+        else:
+            continue
+        banner_messages.append(message)
 
-    return {}
+    return {"maintenance_banners": banner_messages}
