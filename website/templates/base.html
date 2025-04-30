@@ -12,7 +12,32 @@
     />
   </head>
   <body>
-    {% include 'navbar.html' %}
+    {% include 'navbar.html' %} {% if maintenance_banners %}
+    <div
+      id="maintenance-banner"
+      style="
+        background: #ffcc00;
+        color: #000;
+        text-align: center;
+        padding: 10px;
+        font-weight: bold;
+      "
+    >
+      ⚠️ <span id="banner-text">{{ maintenance_banners.0 }}</span>
+    </div>
+
+    <script>
+      const messages = {{ maintenance_banners|safe }};
+      let currentIndex = 0;
+      const textElement = document.getElementById('banner-text');
+
+      setInterval(() => {
+        currentIndex = (currentIndex + 1) % messages.length;
+        textElement.textContent =   messages[currentIndex];
+      }, 5000); // Change every 5 seconds
+    </script>
+    {% endif %}
+
     <div class="container">
       <br />
       {% if messages %} {% for message in messages %}
